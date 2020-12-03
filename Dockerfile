@@ -1,6 +1,6 @@
 # JFROG -----------------------------------
 
-FROM golang:1.14.4-alpine as builder
+FROM golang:1.15.5-alpine as builder
 WORKDIR /tmp/src/github.com/jfrog/jfrog-cli-go
 RUN apk update && apk add --no-cache git
 
@@ -10,9 +10,9 @@ RUN mkdir -p /tmp/src/github.com/jfrog/jfrog-cli-go && \
     cd /tmp/src/github.com/jfrog/jfrog-cli-go && \
     git checkout $(git describe --tags `git rev-list --tags --max-count=1`)
 
-RUN sh /tmp/src/github.com/jfrog/jfrog-cli-go/build.sh
+RUN sh /tmp/src/github.com/jfrog/jfrog-cli-go/build/build.sh
 
-FROM node:14.4.0-alpine
+FROM node:15.3.0-alpine
 RUN apk add --no-cache bash tzdata ca-certificates
 COPY --from=builder /tmp/src/github.com/jfrog/jfrog-cli-go/jfrog /usr/bin/jfrog
 RUN chmod +x /usr/bin/jfrog
