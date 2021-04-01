@@ -12,7 +12,7 @@ RUN mkdir -p /tmp/src/github.com/jfrog/jfrog-cli-go && \
 
 RUN sh /tmp/src/github.com/jfrog/jfrog-cli-go/build/build.sh
 
-FROM node:15.3.0-alpine
+FROM node:15.12.0-alpine3.13
 RUN apk add --no-cache bash tzdata ca-certificates
 COPY --from=builder /tmp/src/github.com/jfrog/jfrog-cli-go/jfrog /usr/bin/jfrog
 RUN chmod +x /usr/bin/jfrog
@@ -24,7 +24,7 @@ RUN chmod +x /usr/bin/jfrog
 
 RUN apk update && \
     apk upgrade && \
-    apk add --no-cache git g++ gcc libgcc libstdc++ linux-headers make python && \
+    apk add --no-cache git g++ gcc libgcc libstdc++ linux-headers make python3 && \
     apk update && \
     npm i npm@latest -g
 
@@ -68,7 +68,7 @@ RUN \
   && echo "http://dl-cdn.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositories \
   && echo "http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories \
   && apk add --no-cache \
-  python \
+  python3 \
   build-base \
   git \
   bash \
