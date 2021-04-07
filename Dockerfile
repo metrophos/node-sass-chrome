@@ -1,6 +1,6 @@
 # JFROG -----------------------------------
 
-FROM golang:1.15.5-alpine as builder
+FROM golang:1.16.0-alpine as builder
 WORKDIR /tmp/src/github.com/jfrog/jfrog-cli-go
 RUN apk update && apk add --no-cache git
 
@@ -12,8 +12,8 @@ RUN mkdir -p /tmp/src/github.com/jfrog/jfrog-cli-go && \
 
 RUN sh /tmp/src/github.com/jfrog/jfrog-cli-go/build/build.sh
 
-FROM node:15.3.0-alpine
-RUN apk add --no-cache bash tzdata ca-certificates
+FROM node:15.11.0-alpine
+RUN apk add --no-cache bash tzdata ca-certificates curl
 COPY --from=builder /tmp/src/github.com/jfrog/jfrog-cli-go/jfrog /usr/bin/jfrog
 RUN chmod +x /usr/bin/jfrog
 
@@ -26,7 +26,7 @@ RUN apk update && \
     apk upgrade && \
     apk add --no-cache git g++ gcc libgcc libstdc++ linux-headers make python && \
     apk update && \
-    npm i npm@latest -g
+    npm i npm@7.6.1 -g
 
 # install libsass
 RUN git clone https://github.com/sass/sassc && cd sassc && \
@@ -51,14 +51,6 @@ ENV SKIP_SASS_BINARY_DOWNLOAD_FOR_CI true
 ENV SKIP_NODE_SASS_TESTS true
 
 # NODE-SASS END ---------------------------
-
-
-# SERENITY-CLI ----------------------------
-
-RUN npm i serenity-cli -g && \
-    serenity update
-
-# SERENITY-CLI END ------------------------
 
 
 # CHROMIUM AND CHROMEDRIVER ---------------
